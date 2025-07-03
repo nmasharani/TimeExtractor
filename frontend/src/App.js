@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 
 function App() {
-  const [icsUrl, setIcsUrl] = useState('https://calendar.google.com/calendar/ical/nisha.masharani%40includedhealth.com/public/basic.ics');
+  const [icsUrl, setIcsUrl] = useState('');
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -13,7 +13,7 @@ function App() {
     setError('');
     setEvents([]);
     try {
-      const response = await fetch(`/api/free-times?ics_url=${encodeURIComponent(icsUrl)}`);
+      const response = await fetch(`http://127.0.0.1:5000/api/free-times?ics_url=${encodeURIComponent(icsUrl)}`);
       if (!response.ok) throw new Error('Failed to fetch events');
       const data = await response.json();
       setEvents(data.events);
@@ -34,9 +34,9 @@ function App() {
             value={icsUrl}
             onChange={e => setIcsUrl(e.target.value)}
             style={{ width: 400 }}
-            placeholder="Enter public ICS URL"
+            placeholder="Enter public ICS URL (e.g. https://...)"
           />
-          <button type="submit" style={{ marginLeft: 10 }}>Fetch Events</button>
+          <button type="submit" style={{ marginLeft: 10 }} disabled={!icsUrl}>Fetch Events</button>
         </form>
         {loading && <p>Loading events...</p>}
         {error && <p style={{ color: 'red' }}>{error}</p>}
