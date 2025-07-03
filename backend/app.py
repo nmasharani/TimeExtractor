@@ -1,11 +1,15 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import requests
 from ics import Calendar
 from datetime import datetime, timedelta, timezone
+from flask_cors import CORS
+
 
 app = Flask(__name__)
 
-ICS_URL = "https://calendar.google.com/calendar/ical/nisha.masharani%40includedhealth.com/public/basic.ics"
+CORS(app)
+
+ICS_URL_DEFAULT = "https://calendar.google.com/calendar/ical/nisha.masharani%40includedhealth.com/public/basic.ics"
 
 @app.route('/')
 def index():
@@ -13,8 +17,10 @@ def index():
 
 @app.route('/api/free-times')
 def free_times():
+    # Get ICS URL from query parameter, or use default
+    ics_url = request.args.get('ics_url', ICS_URL_DEFAULT)
     # Fetch the ICS file
-    r = requests.get(ICS_URL)
+    r = requests.get(ics_url)
     r.raise_for_status()
     c = Calendar(r.text)
     # Time window: +/- 2 weeks from now
