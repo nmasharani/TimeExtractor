@@ -3,6 +3,7 @@ import requests
 from ics import Calendar
 from datetime import datetime, timedelta, timezone
 from flask_cors import CORS
+import os
 
 
 app = Flask(__name__)
@@ -43,4 +44,7 @@ def free_times():
     return jsonify({"events": events})
 
 if __name__ == '__main__':
-    app.run(debug=True) 
+    # Production settings
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('FLASK_ENV') == 'development'
+    app.run(host='0.0.0.0', port=port, debug=debug) 
