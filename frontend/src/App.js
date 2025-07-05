@@ -7,13 +7,16 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // Use environment variable for API URL, fallback to localhost for development
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000';
+
   const fetchEvents = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
     setEvents([]);
     try {
-      const response = await fetch(`http://127.0.0.1:5000/api/free-times?ics_url=${encodeURIComponent(icsUrl)}`);
+      const response = await fetch(`${API_BASE_URL}/api/free-times?ics_url=${encodeURIComponent(icsUrl)}`);
       if (!response.ok) throw new Error('Failed to fetch events');
       const data = await response.json();
       setEvents(data.events);
