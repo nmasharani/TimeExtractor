@@ -31,21 +31,23 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>ICS Calendar Event Viewer</h1>
-        <form onSubmit={fetchEvents} style={{ marginBottom: 20 }}>
+        <form onSubmit={fetchEvents} className="form-container">
           <input
             type="text"
             value={icsUrl}
             onChange={e => setIcsUrl(e.target.value)}
-            style={{ width: 400 }}
+            className="url-input"
             placeholder="Enter public ICS URL (e.g. https://...)"
           />
-          <button type="submit" style={{ marginLeft: 10 }} disabled={!icsUrl}>Fetch Events</button>
+          <button type="submit" className="fetch-button" disabled={!icsUrl}>
+            Fetch Events
+          </button>
         </form>
-        {loading && <p>Loading events...</p>}
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <ul style={{ textAlign: 'left', maxWidth: 600, margin: '0 auto' }}>
+        {loading && <p className="loading-text">Loading events...</p>}
+        {error && <p className="error-text">{error}</p>}
+        <ul className="events-list">
           {events.map((event, idx) => (
-            <li key={idx}>
+            <li key={idx} className="event-item">
               <strong>{event.name}</strong><br />
               {event.begin} - {event.end} {event.all_day ? '(All day)' : ''}
             </li>
